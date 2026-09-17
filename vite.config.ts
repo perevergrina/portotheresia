@@ -14,8 +14,8 @@ const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === 'seatbelt';
 
 const localBindingConfig = {
   name: 'portovera',
-  main: 'vinext/server/fetch-handler',
-  compatibility_date: '2026-09-15',
+  main: './worker.ts',
+  compatibility_date: '2026-09-16',
   compatibility_flags: ['nodejs_compat'],
   observability: { enabled: true },
   d1_databases: d1
@@ -62,3 +62,4 @@ export default defineConfig(async () => {
     ],
   };
 });
+
