@@ -10,6 +10,7 @@ import {
   Mail,
   MapPin,
   MessageCircle,
+  Play,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -25,8 +26,15 @@ type Project = {
   summary: Localized;
   result: Localized;
   images: string[];
-  layout: 'triptych' | 'portrait-duo' | 'landscape-stack' | 'independent-duo';
+  layout:
+    | 'triptych'
+    | 'portrait-duo'
+    | 'landscape-stack'
+    | 'independent-duo'
+    | 'video-preview';
   href?: string;
+  linkLabel?: Localized;
+  previewHref?: string;
 };
 
 const projects: Project[] = [
@@ -49,7 +57,8 @@ const projects: Project[] = [
       '/portfolio/radjawali-travel-copy.webp',
     ],
     layout: 'triptych',
-    href: 'https://www.instagram.com/radjawali.scc',
+    href: 'https://www.instagram.com/radjawali.scc?stkn=ZjNka2NxZ2hwdXFt',
+    linkLabel: { en: 'View Instagram', id: 'Lihat Instagram' },
   },
   {
     title: 'Bunk Bed & Breakfast',
@@ -70,6 +79,8 @@ const projects: Project[] = [
       '/portfolio/bunk-islamic-new-year.webp',
     ],
     layout: 'triptych',
+    href: 'https://www.instagram.com/bunkbedandbreakfast?stkn=aWFtNTV3cm1tdTJm',
+    linkLabel: { en: 'View Instagram', id: 'Lihat Instagram' },
   },
   {
     title: 'Travelxism',
@@ -131,6 +142,27 @@ const projects: Project[] = [
     ],
     layout: 'independent-duo',
     href: 'https://drive.google.com/drive/folders/1-4etBN1yr79wJHf9oLXBTJeft7ysj_eb?usp=drive_link',
+    linkLabel: { en: 'View creative work', id: 'Lihat karya kreatif' },
+  },
+  {
+    title: 'Video Editing',
+    client: { en: 'Video editing showcase', id: 'Portofolio editing video' },
+    year: 'Portfolio',
+    category: 'social',
+    summary: {
+      en: 'A selected editing project shown through a clickable video preview.',
+      id: 'Karya editing pilihan yang ditampilkan melalui preview video yang dapat diklik.',
+    },
+    result: {
+      en: 'Video editing · Visual storytelling · Post-production',
+      id: 'Editing video · Cerita visual · Pascaproduksi',
+    },
+    images: ['/portfolio/video-editing-preview.jpg'],
+    layout: 'video-preview',
+    href: 'https://drive.google.com/drive/folders/1R11IuhozlqUoOQgge2fswQNGfy1puKF1',
+    linkLabel: { en: 'View more videos', id: 'Lihat video lainnya' },
+    previewHref:
+      'https://drive.google.com/file/d/14az3SF_McsEQH96d5N0olZ5U_h8aOcuK/view?usp=drive_link',
   },
 ];
 
@@ -147,6 +179,7 @@ const imageSizes: Record<string, { width: number; height: number }> = {
   '/portfolio/realino-learning.webp': { width: 1200, height: 674 },
   '/portfolio/self-project-topeng.webp': { width: 540, height: 675 },
   '/portfolio/self-project-roni.webp': { width: 464, height: 663 },
+  '/portfolio/video-editing-preview.jpg': { width: 1200, height: 675 },
 };
 
 const experience = [
@@ -236,7 +269,7 @@ const copy = {
     workTitle: 'Strategy with a',
     workAccent: 'human pulse.',
     workIntro:
-      'A selection of social content, research, and community projects — each grounded in clarity, empathy, and measurable action.',
+      'A selection of social content, video editing, research, and community projects — each grounded in clarity, empathy, and measurable action.',
     filterLabel: 'Filter projects',
     filters: {
       all: 'All',
@@ -246,6 +279,7 @@ const copy = {
     },
     openProject: 'Open',
     sample: 'project sample',
+    videoPreview: 'Watch video preview',
     experienceKicker: '03 / Experience',
     experienceTitle: 'Learning by',
     experienceAccent: 'doing.',
@@ -308,7 +342,7 @@ const copy = {
     workTitle: 'Strategi dengan',
     workAccent: 'sentuhan manusia.',
     workIntro:
-      'Pilihan karya media sosial, riset, dan komunitas — semuanya dibangun dengan kejelasan, empati, dan tindakan yang terukur.',
+      'Pilihan karya media sosial, editing video, riset, dan komunitas — semuanya dibangun dengan kejelasan, empati, dan tindakan yang terukur.',
     filterLabel: 'Filter karya',
     filters: {
       all: 'Semua',
@@ -318,6 +352,7 @@ const copy = {
     },
     openProject: 'Buka',
     sample: 'sampel proyek',
+    videoPreview: 'Tonton preview video',
     experienceKicker: '03 / Pengalaman',
     experienceTitle: 'Belajar dengan',
     experienceAccent: 'melakukan.',
@@ -542,24 +577,47 @@ export default function Home() {
           {visibleProjects.map((project, index) => (
             <article className="project" key={project.title}>
               <div className={`project-gallery gallery-${project.layout}`}>
-                {project.images.map((image, imageIndex) => (
-                  <img
-                    src={image}
-                    alt={`${project.title} ${text.sample} ${imageIndex + 1}`}
-                    key={image}
-                    loading="lazy"
-                    decoding="async"
-                    width={imageSizes[image].width}
-                    height={imageSizes[image].height}
-                    style={
-                      project.layout === 'landscape-stack'
-                        ? {
-                            aspectRatio: `${imageSizes[image].width} / ${imageSizes[image].height}`,
-                          }
-                        : undefined
-                    }
-                  />
-                ))}
+                {project.previewHref ? (
+                  <a
+                    className="video-preview-link"
+                    href={project.previewHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${text.videoPreview}: ${project.title}`}
+                  >
+                    <img
+                      src={project.images[0]}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      width={imageSizes[project.images[0]].width}
+                      height={imageSizes[project.images[0]].height}
+                    />
+                    <span>
+                      <Play aria-hidden="true" fill="currentColor" />
+                      {text.videoPreview}
+                    </span>
+                  </a>
+                ) : (
+                  project.images.map((image, imageIndex) => (
+                    <img
+                      src={image}
+                      alt={`${project.title} ${text.sample} ${imageIndex + 1}`}
+                      key={image}
+                      loading="lazy"
+                      decoding="async"
+                      width={imageSizes[image].width}
+                      height={imageSizes[image].height}
+                      style={
+                        project.layout === 'landscape-stack'
+                          ? {
+                              aspectRatio: `${imageSizes[image].width} / ${imageSizes[image].height}`,
+                            }
+                          : undefined
+                      }
+                    />
+                  ))
+                )}
               </div>
               <div className="project-meta">
                 <span>{String(index + 1).padStart(2, '0')}</span>
@@ -573,11 +631,15 @@ export default function Home() {
                 </div>
                 {project.href ? (
                   <a
+                    className="project-link-button"
                     href={project.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`${text.openProject} ${project.title}`}
+                    aria-label={`${project.linkLabel?.[language] ?? text.openProject}: ${project.title}`}
                   >
+                    <span>
+                      {project.linkLabel?.[language] ?? text.openProject}
+                    </span>
                     <ArrowUpRight aria-hidden="true" />
                   </a>
                 ) : (
