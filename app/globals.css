@@ -555,7 +555,7 @@ h2 em {
   align-content: start;
   display: grid;
   gap: 18px;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr);
   min-width: 0;
   padding-top: 4px;
 }
@@ -567,7 +567,8 @@ h2 em {
 }
 .project-meta p {
   margin: 0;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 .project-meta > div > p:first-child {
   font-size: 12px;
@@ -577,16 +578,19 @@ h2 em {
 }
 .project-meta h3 {
   font-family: Georgia, serif;
-  font-size: clamp(35px, 4vw, 60px);
+  font-size: clamp(35px, 3.2vw, 48px);
   font-weight: 500;
   letter-spacing: -0.04em;
   line-height: 1;
   margin: 18px 0 24px;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  text-wrap: balance;
+  word-break: normal;
 }
 .project-summary {
   font-size: 16px;
   line-height: 1.65;
+  text-wrap: pretty;
 }
 .project-result {
   border-top: 1px solid var(--line);
@@ -614,7 +618,9 @@ h2 em {
   font-size: 12px;
   font-weight: 800;
   gap: 8px;
+  grid-column: 2;
   height: auto;
+  justify-self: start;
   min-height: 44px;
   padding: 9px 14px;
   white-space: nowrap;
@@ -630,7 +636,7 @@ h2 em {
   color: white;
 }
 .project-mark {
-  opacity: 0.35;
+  display: none;
 }
 
 .experience-section {
@@ -1190,9 +1196,7 @@ footer > a:last-child {
     display: none;
   }
   .project-meta > .project-link-button {
-    grid-column: 2;
-    justify-self: start;
-    margin-top: 4px;
+    margin-top: 0;
   }
   .experience-section {
     gap: 55px;
